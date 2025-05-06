@@ -1,0 +1,58 @@
+.homepage {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.homepage h1 {
+  text-align: center;
+  color: #ff4500;
+  margin-bottom: 20px;
+}
+
+.movie-list,
+.exclusive-content {
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-list h2,
+.exclusive-content h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.movie-list ul,
+.exclusive-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.movie-list li,
+.exclusive-content li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.movie-list li:last-child,
+.exclusive-content li:last-child {
+  border-bottom: none;
+}
+
+.movie-list a,
+.exclusive-content a {
+  color: #ff4500;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.movie-list a:hover,
+.exclusive-content a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,14 @@
+.exclusive-content li {
+  display: flex;
+  flex-direction: column;
+}
+
+.exclusive-content h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.exclusive-content p {
+  margin: 5px 0;
+  color: #666;
+}
