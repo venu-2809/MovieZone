@@ -1,23 +1,14 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+Your .gitignore file is used to tell Git which files and directories to ignore in your repository. The files and folders listed are typically:
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+- Automatically generated (like node_modules, build, coverage)
+- Environment-specific (like .env files)
+- System files (like .DS_Store)
+- Log files
 
-# testing
-/coverage
+You should ignore these because:
 
-# production
-/build
+- They are not needed in version control.
+- They can be large or contain sensitive information.
+- They can be regenerated or are specific to your local environment.
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+This keeps your repository clean, secure, and easier to manage.
