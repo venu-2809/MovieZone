@@ -1,0 +1,528 @@
+/* MoviePlayer.css - Ultra-polished, engaging UI for a premium movie player experience */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap');
+
+:root {
+    --primary: #e50914;
+    --primary-dark: #b0060f;
+    --accent: #f40612;
+    --bg: #181818;
+    --bg-light: #232323;
+    --bg-glass: rgba(24,24,24,0.85);
+    --text: #fff;
+    --text-muted: #b3b3b3;
+    --shadow: 0 8px 32px rgba(0,0,0,0.35);
+    --shadow-hover: 0 12px 40px rgba(0,0,0,0.5);
+    --radius: 18px;
+    --radius-sm: 10px;
+    --transition: 0.3s cubic-bezier(.4,0,.2,1);
+    --transition-fast: 0.18s cubic-bezier(.4,0,.2,1);
+    --overlay: linear-gradient(180deg, rgba(24,24,24,0.0) 0%, rgba(24,24,24,0.7) 100%);
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: #111;
+}
+
+.movie-player-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 48px auto;
+    background: var(--bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow var(--transition), transform var(--transition);
+    animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1);
+    border: 1.5px solid #232323;
+}
+
+.movie-player-container:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px) scale(1.01);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(24px);}
+    to { opacity: 1; transform: none;}
+}
+
+.movie-player-video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: #000;
+    overflow: hidden;
+}
+
+.movie-player-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+    border-bottom: 1px solid var(--bg-light);
+    transition: filter 0.2s;
+    display: block;
+}
+
+.movie-player-video::after {
+    content: "";
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--overlay);
+    z-index: 1;
+}
+
+.movie-player-container:focus-within .movie-player-video,
+.movie-player-video:focus {
+    filter: brightness(0.95) blur(1px);
+    outline: 2px solid var(--primary);
+}
+
+.movie-player-title {
+    position: absolute;
+    top: 32px;
+    left: 44px;
+    color: var(--text);
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.85);
+    z-index: 3;
+    pointer-events: none;
+    letter-spacing: 0.01em;
+    font-family: 'Roboto', Arial, sans-serif;
+    user-select: none;
+    transition: font-size 0.2s;
+    line-height: 1.1;
+    max-width: 70%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.movie-player-badges {
+    position: absolute;
+    top: 32px;
+    right: 44px;
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+}
+
+.movie-player-badge {
+    background: var(--primary-dark);
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 8px rgba(229,9,20,0.12);
+    letter-spacing: 0.03em;
+    opacity: 0.92;
+    text-transform: uppercase;
+}
+
+.movie-player-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 36px;
+    background: linear-gradient(0deg, rgba(24,24,24,0.98) 90%, rgba(24,24,24,0.7) 100%);
+    backdrop-filter: blur(6px) saturate(1.2);
+    gap: 18px;
+    position: relative;
+    border-top: 1.5px solid #232323;
+}
+
+.movie-player-btn {
+    background: var(--bg-light);
+    color: var(--text);
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: background var(--transition), color var(--transition), transform 0.18s;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.movie-player-btn:active {
+    transform: scale(0.96);
+}
+
+.movie-player-btn:hover, .movie-player-btn:focus {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(229,9,20,0.18);
+}
+
+.movie-player-btn svg {
+    width: 1.6em;
+    height: 1.6em;
+}
+
+.movie-player-btn[aria-pressed="true"] {
+    background: var(--primary-dark);
+    color: #fff;
+}
+
+.movie-player-progress {
+    flex: 1;
+    margin: 0 22px;
+    height: 10px;
+    background: #292929;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: background 0.2s;
+    overflow: visible;
+}
+
+.movie-player-progress:hover {
+    background: #353535;
+}
+
+.movie-player-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 5px;
+    transition: width 0.2s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 1px 8px rgba(229,9,20,0.12);
+    position: relative;
+    z-index: 1;
+}
+
+.movie-player-progress-dot {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 50%;
+    transform: translateY(-50%) scale(1);
+    box-shadow: 0 2px 8px rgba(229,9,20,0.18);
+    transition: background 0.2s, transform 0.2s;
+    border: 2.5px solid #fff;
+    pointer-events: none;
+    z-index: 2;
+    display: none;
+}
+
+.movie-player-progress:hover .movie-player-progress-dot,
+.movie-player-progress:focus .movie-player-progress-dot {
+    display: block;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.movie-player-progress-buffer {
+    position: absolute;
+    top: 0; left: 0; height: 100%;
+    background: linear-gradient(90deg, #444 0%, #888 100%);
+    opacity: 0.25;
+    border-radius: 5px;
+    z-index: 0;
+    transition: width 0.2s cubic-bezier(.4,0,.2,1);
+}
+
+.movie-player-time {
+    color: var(--text-muted);
+    font-size: 1.08rem;
+    min-width: 68px;
+    text-align: right;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 0.01em;
+    user-select: none;
+}
+
+.movie-player-volume {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.movie-player-volume-slider {
+    width: 90px;
+    accent-color: var(--primary);
+    background: transparent;
+    height: 4px;
+    border-radius: 2px;
+    transition: accent-color 0.2s;
+}
+
+.movie-player-volume-slider::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(229,9,20,0.18);
+}
+
+.movie-player-volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid #fff;
+    cursor: pointer;
+}
+
+.movie-player-volume-slider::-ms-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid #fff;
+    cursor: pointer;
+}
+
+.movie-player-volume-slider:focus {
+    outline: none;
+    accent-color: var(--accent);
+}
+
+.movie-player-volume-slider::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: #353535;
+}
+
+.movie-player-volume-slider::-ms-fill-lower,
+.movie-player-volume-slider::-ms-fill-upper {
+    background: #353535;
+}
+
+.movie-player-settings {
+    margin-left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.movie-player-settings-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    padding: 4px 8px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.movie-player-settings-btn:hover,
+.movie-player-settings-btn:focus {
+    color: var(--primary);
+    background: rgba(229,9,20,0.08);
+}
+
+.movie-player-tooltip {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #232323;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.98rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.movie-player-btn:focus .movie-player-tooltip,
+.movie-player-btn:hover .movie-player-tooltip,
+.movie-player-settings-btn:focus .movie-player-tooltip,
+.movie-player-settings-btn:hover .movie-player-tooltip {
+    opacity: 1;
+}
+
+.movie-player-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.movie-player-spinner {
+    width: 54px;
+    height: 54px;
+    border: 5px solid rgba(255,255,255,0.15);
+    border-top: 5px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+/* Subtitles styling */
+.movie-player-subtitles {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+    color: #fff;
+    font-size: 1.25rem;
+    font-family: 'Roboto', Arial, sans-serif;
+    text-shadow: 0 2px 8px #000, 0 0px 2px #000;
+    z-index: 5;
+    pointer-events: none;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    background: rgba(24,24,24,0.18);
+    border-radius: 8px;
+    padding: 6px 0;
+    transition: font-size 0.2s;
+}
+
+/* Mini overlay controls for mobile */
+.movie-player-mobile-overlay {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(24,24,24,0.98) 90%, rgba(24,24,24,0.7) 100%);
+    padding: 10px 8px;
+    z-index: 8;
+    border-top-left-radius: var(--radius-sm);
+    border-top-right-radius: var(--radius-sm);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.18);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .movie-player-container {
+        max-width: 100%;
+        margin: 24px 0;
+    }
+    .movie-player-title {
+        font-size: 1.3rem;
+        left: 18px;
+        top: 14px;
+        max-width: 60%;
+    }
+    .movie-player-badges {
+        top: 14px;
+        right: 18px;
+    }
+    .movie-player-controls {
+        padding: 14px 12px;
+    }
+    .movie-player-video-wrapper {
+        height: 320px;
+    }
+    .movie-player-subtitles {
+        font-size: 1.05rem;
+        bottom: 60px;
+    }
+}
+
+@media (max-width: 700px) {
+    .movie-player-container {
+        border-radius: 0;
+        margin: 10px 0;
+    }
+    .movie-player-video-wrapper {
+        height: 180px;
+    }
+    .movie-player-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 6px;
+    }
+    .movie-player-title {
+        font-size: 1.08rem;
+        left: 10px;
+        top: 8px;
+        max-width: 55%;
+    }
+    .movie-player-badges {
+        top: 8px;
+        right: 10px;
+    }
+    .movie-player-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    .movie-player-progress {
+        margin: 0 8px;
+        height: 6px;
+    }
+    .movie-player-time {
+        font-size: 0.95rem;
+        min-width: 48px;
+    }
+    .movie-player-volume-slider {
+        width: 60px;
+    }
+    .movie-player-subtitles {
+        font-size: 0.92rem;
+        bottom: 38px;
+    }
+    .movie-player-mobile-overlay {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* Accessibility: Focus styles */
+.movie-player-btn:focus-visible,
+.movie-player-settings-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar for progress bar (Webkit) */
+.movie-player-progress::-webkit-scrollbar {
+    height: 8px;
+    background: #232323;
+    border-radius: 4px;
+}
+.movie-player-progress::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+/* Hide default video controls */
+video::-webkit-media-controls {
+    display: none !important;
+}
+video::-webkit-media-controls-enclosure {
+    display: none !important;
+}
