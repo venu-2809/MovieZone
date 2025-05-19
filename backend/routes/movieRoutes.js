@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Movie = require('../models/Movie');
 
+router.post('/', async (req, res) => {
+  try {
+    const movie = new Movie(req.body);
+    await movie.save();
+    res.status(201).json(movie);
+  } catch (error) {
+    res.status(400).json({ message: 'Error adding movie', error: error.message });
+  }
+});
 // Get all movies
 router.get('/', async (req, res) => {
   try {

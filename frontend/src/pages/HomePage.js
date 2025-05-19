@@ -1,47 +1,13 @@
 // filepath: d:\VSCODE\real time project\CinemaOne\frontend\src\pages\HomePage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomePage.css';
-import MovieList from '../components/MovieList';
 import ExclusiveContent from '../components/ExclusiveContent';
 import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
 import { FaStar } from 'react-icons/fa';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-// Dummy data for demonstration
-const featuredMovie = {
-  title: 'The AI Revolution',
-  poster: 'https://via.placeholder.com/320x480?text=Featured+Movie',
-  rating: 4.9,
-  genre: 'Sci-Fi',
-  description: 'A breathtaking journey into the future of artificial intelligence.',
-};
-
-const movies = [
-  {
-    id: 1,
-    title: 'Quantum Leap',
-    poster: 'https://via.placeholder.com/200x300?text=Movie+1',
-    rating: 4.7,
-    genre: 'Adventure',
-  },
-  {
-    id: 2,
-    title: 'Neural Dreams',
-    poster: 'https://via.placeholder.com/200x300?text=Movie+2',
-    rating: 4.5,
-    genre: 'Drama',
-  },
-  {
-    id: 3,
-    title: 'Code Runner',
-    poster: 'https://via.placeholder.com/200x300?text=Movie+3',
-    rating: 4.8,
-    genre: 'Action',
-  },
-  // Add more movies as needed
-];
-
-// Enhanced Hero Banner with background image, overlay, and animation
+// Hero Banner Component
 const HeroBanner = () => (
   <section className="hero-banner" style={{
     minHeight: '60vh',
@@ -121,7 +87,7 @@ const MovieCard = ({ movie }) => (
       <FaStar style={{ marginRight: 4 }} /> {movie.rating}
     </div>
     <span style={{ color: '#a5b4fc', fontSize: '0.95rem', marginBottom: 10 }}>{movie.genre}</span>
-    <button
+    <Link to={`/movies/${movie._id || movie.id}`}
       style={{
         background: 'linear-gradient(90deg, #00b894 0%, #00cec9 100%)',
         color: '#fff',
@@ -138,48 +104,22 @@ const MovieCard = ({ movie }) => (
       onMouseOut={e => (e.currentTarget.style.transform = 'scale(1)')}
     >
       Watch Now
-    </button>
+    </Link>
   </div>
 );
-
-// Animated section divider
-const SectionDivider = ({ children }) => (
-  <div className="section-divider">
-    <span>{children}</span>
-  </div>
-);
-
-// Animated scroll-to-top button
-const ScrollToTopButton = () => {
-  const [visible, setVisible] = useState(false);
-  React.useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 300);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return visible ? (
-    <button
-      className="scroll-to-top"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Scroll to top"
-    >
-      ⬆️
-    </button>
-  ) : null;
-};
 
 const HomePage = () => {
-  const [search, setSearch] = useState('');
+  const [movies, setMovies] = useState([]);
+  const [featuredMovie, setFeaturedMovie] = useState(null);
 
-  const exclusiveContent = [
-    { id: 1, title: 'BTS Clip 1', description: 'Behind the scenes of Movie 1', url: '#', thumbnail: '/images/bts1.jpg' },
-    { id: 2, title: 'Premiere Event', description: 'Live event with cast', url: '#', thumbnail: '/images/event1.jpg' },
-  ]; // Replace with API data
-
-  const filteredContent = exclusiveContent.filter(c =>
-    c.title.toLowerCase().includes(search.toLowerCase()) ||
-    c.description.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/movies')
+      .then(res => {
+        setMovies(res.data);
+        if (res.data.length > 0) setFeaturedMovie(res.data[0]);
+      })
+      .catch(() => setMovies([]));
+  }, []);
 
   return (
     <div className="homepage-container" style={{ background: 'linear-gradient(120deg, #232526 0%, #414345 100%)', minHeight: '100vh' }}>
@@ -205,7 +145,7 @@ const HomePage = () => {
         }}>
           <h2 style={{ fontWeight: 700, fontSize: '2rem', marginBottom: '1.5rem', color: '#fff' }}>Featured Movie</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <MovieCard movie={featuredMovie} />
+            {featuredMovie && <MovieCard movie={featuredMovie} />}
           </div>
         </section>
 
@@ -226,7 +166,7 @@ const HomePage = () => {
             paddingBottom: '1rem',
           }}>
             {movies.map(movie => (
-              <MovieCard movie={movie} key={movie.id} />
+              <MovieCard movie={movie} key={movie._id || movie.id} />
             ))}
           </div>
         </section>
@@ -254,11 +194,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-// Add this to your index.css or App.css for animation
-/*
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(25px);}
-  to { opacity: 1; transform: translateY(0);}
-}
-*/

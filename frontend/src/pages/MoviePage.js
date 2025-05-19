@@ -1,27 +1,8 @@
 // filepath: d:\VSCODE\real time project\CinemaOne\frontend\src\pages\MoviePage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import MoviePlayer from '../components/MoviePlayer';
-
-// Example movie data (replace with real data/fetch from API)
-const movieData = {
-  title: 'Inception',
-  year: 2010,
-  genre: 'Action, Sci-Fi, Thriller',
-  duration: '2h 28m',
-  rating: 8.8,
-  description:
-    'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.',
-  poster:
-    'https://m.media-amazon.com/images/I/51s+Qd8QkGL._AC_SY679_.jpg',
-  movieUrl: 'https://example.com/movie.mp4', // Replace with actual movie URL
-  cast: [
-    'Leonardo DiCaprio',
-    'Joseph Gordon-Levitt',
-    'Elliot Page',
-    'Tom Hardy',
-  ],
-  director: 'Christopher Nolan',
-};
+import axios from 'axios';
 
 const shimmerStyle = {
   background: 'linear-gradient(90deg, #232526 25%, #2c2c2c 50%, #232526 75%)',
@@ -30,12 +11,38 @@ const shimmerStyle = {
 };
 
 const MoviePage = () => {
+  const { id } = useParams();
+  const [movieData, setMovieData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
 
-  const handleFavorite = () => setIsFavorite((prev) => !prev);
+  useEffect(() => {
+    setLoading(true);
+    axios.get(`http://localhost:5000/api/movies/${id}`)
+      .then(res => {
+        setMovieData(res.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
 
-  // For description expand/collapse
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#232526', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ ...shimmerStyle, width: 200, height: 30, borderRadius: 8 }} />
+      </div>
+    );
+  }
+
+  if (!movieData) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#232526', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <h2>Movie not found.</h2>
+      </div>
+    );
+  }
+
   const shortDesc = movieData.description.slice(0, 120) + (movieData.description.length > 120 ? '...' : '');
 
   return (
@@ -170,7 +177,7 @@ const MoviePage = () => {
                 ★ {movieData.rating}
               </span>
               <button
-                onClick={handleFavorite}
+                onClick={() => setIsFavorite((prev) => !prev)}
                 className="favorite-btn"
                 style={{
                   background: isFavorite
@@ -277,7 +284,6 @@ const MoviePage = () => {
                   position: 'relative',
                   ...shimmerStyle,
                 }}
-                onClick={() => alert('Navigate to movie detail')}
                 tabIndex={0}
                 aria-label="Related movie"
               >

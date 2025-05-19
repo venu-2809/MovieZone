@@ -128,7 +128,7 @@ function AnimatedRoutes() {
           }
         />
         <Route
-          path="/movie/:id"
+          path="/movies/:id"
           element={
             <PageTransition>
               <MoviePage />

@@ -1,6 +1,7 @@
 // filepath: d:\VSCODE\real time project\CinemaOne\frontend\src\components\ExclusiveContent.js
 import React, { useState, useRef, useEffect } from 'react';
 import './ExclusiveContent.css';
+import axios from 'axios';
 import {
   FaPlayCircle,
   FaStar,
@@ -17,31 +18,32 @@ import {
 
 const fallbackImg = 'https://via.placeholder.com/320x180?text=No+Image';
 
-const exclusiveContent = [
-  {
-    id: 1,
-    title: 'AI Genesis',
-    description:
-      'A mind-bending journey into the birth of artificial intelligence.',
-    genre: 'Sci-Fi',
-    rating: 4.9,
-    thumbnail: '/images/bts1.jpg',
-    url: '#',
-  },
-  {
-    id: 2,
-    title: 'Neural Odyssey',
-    description:
-      'A thrilling adventure through the neural networks of tomorrow.',
-    genre: 'Adventure',
-    rating: 4.8,
-    thumbnail: '/images/event1.jpg',
-    url: '#',
-  },
-  // Add more unique items here...
-];
+// const exclusiveContent = [
+//   {
+//     id: 1,
+//     title: 'AI Genesis',
+//     description:
+//       'A mind-bending journey into the birth of artificial intelligence.',
+//     genre: 'Sci-Fi',
+//     rating: 4.9,
+//     thumbnail: '/images/bts1.jpg',
+//     url: '#',
+//   },
+//   {
+//     id: 2,
+//     title: 'Neural Odyssey',
+//     description:
+//       'A thrilling adventure through the neural networks of tomorrow.',
+//     genre: 'Adventure',
+//     rating: 4.8,
+//     thumbnail: '/images/event1.jpg',
+//     url: '#',
+//   },
+//   // Add more unique items here...
+// ];
 
 const ExclusiveContent = () => {
+  const [exclusiveContent, setExclusiveContent] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [current, setCurrent] = useState(0);
   const [showToast, setShowToast] = useState(false);
@@ -49,9 +51,14 @@ const ExclusiveContent = () => {
   const [autoPlay, setAutoPlay] = useState(true);
   const carouselRef = useRef(null);
   const autoPlayRef = useRef();
-
+   useEffect(() => {
+    axios.get('http://localhost:5000/api/exclusive')
+      .then(res => setExclusiveContent(res.data))
+      .catch(() => setExclusiveContent([]));
+  }, []);
   // Keyboard navigation for accessibility
   useEffect(() => {
+    
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') handlePrev();
       if (e.key === 'ArrowRight') handleNext();
