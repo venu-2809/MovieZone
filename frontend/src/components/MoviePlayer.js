@@ -9,7 +9,20 @@ const formatTime = (time) => {
   return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
-const MoviePlayer = ({ movieUrl }) => {
+const watermarkStyle = {
+  position: 'absolute',
+  top: 20,
+  left: 20,
+  color: 'rgba(255,255,255,0.35)',
+  fontWeight: 700,
+  fontSize: 22,
+  pointerEvents: 'none',
+  userSelect: 'none',
+  textShadow: '1px 1px 8px #000, 0 0 2px #000',
+  zIndex: 3,
+};
+
+const MoviePlayer = ({ movieUrl, username }) => {
   const videoRef = useRef(null);
   const controlsRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -261,7 +274,6 @@ const MoviePlayer = ({ movieUrl }) => {
       }
     : { display: 'none' };
 
-  // Main render
   return (
     <div
       style={{
@@ -302,6 +314,12 @@ const MoviePlayer = ({ movieUrl }) => {
           margin: '0 40px',
         }}
       >
+        {/* Watermark overlay */}
+        {username && (
+          <div style={watermarkStyle}>
+            {username}
+          </div>
+        )}
         <video
           ref={videoRef}
           src={movieUrl}

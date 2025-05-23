@@ -1,7 +1,8 @@
-import React, { Suspense, lazy } from 'react';
+import React, {useEffect , useState, Suspense, lazy } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import { UserContext } from './context/UserContext';
 import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress, Snackbar, Slide } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -165,6 +166,20 @@ function AnimatedRoutes() {
 }
 
 function App() {
+    // 1. Initialize user from localStorage (if exists)
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem('user');
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  // 2. Save user to localStorage on change
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+    }
+  }, [user]);
   // Example: global notification state (could be Redux or context in a real app)
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [snackbarMsg, setSnackbarMsg] = React.useState('');
@@ -176,6 +191,7 @@ function App() {
   }, []);
 
   return (
+    <UserContext.Provider value={{ user, setUser }}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
@@ -190,6 +206,7 @@ function App() {
         />
       </Router>
     </ThemeProvider>
+    </UserContext.Provider>
   );
 }
 

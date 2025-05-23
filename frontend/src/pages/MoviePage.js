@@ -1,8 +1,9 @@
 // filepath: d:\VSCODE\real time project\CinemaOne\frontend\src\pages\MoviePage.js
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import MoviePlayer from '../components/MoviePlayer';
 import axios from 'axios';
+import { UserContext } from '../context/UserContext'; // Make sure this path is correct
 
 const shimmerStyle = {
   background: 'linear-gradient(90deg, #232526 25%, #2c2c2c 50%, #232526 75%)',
@@ -12,11 +13,24 @@ const shimmerStyle = {
 
 const MoviePage = () => {
   const { id } = useParams();
+  const { user } = useContext(UserContext); // Get user info
+  const navigate = useNavigate();
+
   const [movieData, setMovieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
+  const [hasPaid, setHasPaid] = useState(false);
+  const [paying, setPaying] = useState(false);
 
+  // Redirect to login if not logged in
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Fetch movie data
   useEffect(() => {
     setLoading(true);
     axios.get(`http://localhost:5000/api/movies/${id}`)
@@ -26,6 +40,31 @@ const MoviePage = () => {
       })
       .catch(() => setLoading(false));
   }, [id]);
+
+  // Check payment status
+  useEffect(() => {
+    if (user && movieData) {
+      axios.get(`http://localhost:5000/api/payments/hasPaid/${movieData._id}`, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      })
+      .then(res => setHasPaid(res.data.hasPaid))
+      .catch(() => setHasPaid(false));
+    }
+  }, [user, movieData]);
+
+  // Handle payment
+  const handlePay = async () => {
+    setPaying(true);
+    try {
+      await axios.post(`http://localhost:5000/api/payments/pay/${movieData._id}`, {}, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      setHasPaid(true);
+    } catch (err) {
+      alert('Payment failed!');
+    }
+    setPaying(false);
+  };
 
   if (loading) {
     return (
@@ -261,11 +300,34 @@ const MoviePage = () => {
               transition: 'box-shadow 0.2s',
             }}
           >
-            <MoviePlayer movieUrl={movieData.movieUrl} />
+            {!hasPaid ? (
+              <div style={{ padding: 32, textAlign: 'center' }}>
+                <button
+                  onClick={handlePay}
+                  disabled={paying}
+                  style={{
+                    background: '#00b894',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 10,
+                    padding: '14px 38px',
+                    fontWeight: 700,
+                    fontSize: 20,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 12px rgba(0,206,201,0.10)',
+                    marginTop: 20,
+                  }}
+                >
+                  {paying ? 'Processing...' : 'Pay and Watch'}
+                </button>
+              </div>
+            ) : (
+              <MoviePlayer movieUrl={movieData.movieUrl} username={user?.username || 'User'} />
+            )}
           </div>
         </div>
         {/* Suggestions/Related Movies (placeholder) */}
-        <div className="fade-in" style={{ marginTop: 18 }}>
+        <div className="fade-in" style={{ marginTop: 18 }}></div>
           <h3 style={{ fontSize: 22, margin: '32px 0 16px 0', color: '#ffb400', fontWeight: 600 }}>
             You Might Also Like
           </h3>
@@ -298,7 +360,6 @@ const MoviePage = () => {
         </div>
         {/* End Suggestions */}
       </div>
-    </div>
   );
 };
 
