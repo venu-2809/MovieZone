@@ -1,11 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaUserCircle, FaSearch, FaRegBell } from 'react-icons/fa';
+import { UserContext } from '../context/UserContext';
+import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false); // Simulate login state
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
@@ -13,6 +14,7 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const notificationsRef = useRef(null);
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,6 +71,38 @@ const Navbar = () => {
     { id: 3, text: 'Welcome to CinemaOne!' },
   ];
 
+  // Handle logout
+ const handleLogout = async () => {
+  try {
+    // Call backend logout endpoint to clear deviceId
+    await axios.post('http://localhost:5000/api/auth/logout', {}, {
+      headers: { Authorization: `Bearer ${user.token}` }
+    });
+  } catch (err) {
+    // Optionally handle error
+  }
+  setUser(null);
+  localStorage.removeItem('user');
+  setDropdownOpen(false);
+  navigate('/');
+};
+
+  // Handle delete account
+  const handleDeleteAccount = async () => {
+    if (!window.confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+    try {
+      await axios.delete('http://localhost:5000/api/auth/delete', {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      setUser(null);
+      localStorage.removeItem('user');
+      setDropdownOpen(false);
+      navigate('/');
+    } catch (err) {
+      alert('Failed to delete account.');
+    }
+  };
+
   return (
     <nav className="navbar">
       <div
@@ -76,7 +110,7 @@ const Navbar = () => {
           maxWidth: '1120px',
           margin: '0 auto',
           display: 'flex',
-          flexDirection: 'column', // Stack vertically
+          flexDirection: 'column',
           alignItems: 'stretch',
           justifyContent: 'center',
         }}
@@ -120,14 +154,7 @@ const Navbar = () => {
             }}
           >
             <form
-              onSubmit={e => {
-                e.preventDefault();
-                if (search.trim()) {
-                  navigate(`/search?q=${encodeURIComponent(search.trim())}`);
-                  setSearch('');
-                  setMenuOpen(false);
-                }
-              }}
+              onSubmit={handleSearchSubmit}
               role="search"
               style={{ display: 'flex', width: '100%' }}
             >
@@ -190,7 +217,7 @@ const Navbar = () => {
                 About
               </NavLink>
             </li>
-            {!loggedIn && (
+            {!user && (
               <>
                 <li>
                   <NavLink to="/login" className={({ isActive }) => isActive ? 'active-link' : ''}>
@@ -204,7 +231,7 @@ const Navbar = () => {
                 </li>
               </>
             )}
-            {loggedIn && (
+            {user && (
               <li
                 className="navbar-avatar"
                 onClick={handleDropdownToggle}
@@ -213,27 +240,51 @@ const Navbar = () => {
                 ref={dropdownRef}
                 aria-haspopup="true"
                 aria-expanded={dropdownOpen}
+                style={{ position: 'relative' }}
               >
                 <FaUserCircle size={28} />
-                <span className="avatar-name">Alex</span>
+                <span className="avatar-name">{user.username}</span>
                 <span className="dropdown-arrow" aria-hidden="true">▼</span>
                 {dropdownOpen && (
-                  <ul className="dropdown-menu" role="menu">
+                  <ul className="dropdown-menu" role="menu" style={{
+                    position: 'absolute',
+                    right: 0,
+                    top: 40,
+                    background: '#232526',
+                    color: '#fff',
+                    borderRadius: 12,
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
+                    padding: 18,
+                    minWidth: 220,
+                    zIndex: 100,
+                  }}>
                     <li>
-                      <NavLink to="/profile" tabIndex={0}>Profile</NavLink>
+                      <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
+                        {user.username}
+                      </div>
+                      <div style={{ fontSize: 15, color: '#bbb', marginBottom: 8 }}>
+                        {user.email}
+                      </div>
                     </li>
                     <li>
-                      <NavLink to="/settings" tabIndex={0}>Settings</NavLink>
+                      <NavLink to="/packs" tabIndex={0}>My Packs</NavLink>
                     </li>
                     <li>
                       <button
-                        onClick={() => {
-                          setLoggedIn(false);
-                          setDropdownOpen(false);
-                        }}
+                        onClick={handleLogout}
                         tabIndex={0}
+                        style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', color: '#fff', padding: '8px 0', cursor: 'pointer' }}
                       >
                         Logout
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleDeleteAccount}
+                        style={{ color: 'red', width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: '8px 0', cursor: 'pointer' }}
+                        tabIndex={0}
+                      >
+                        Delete Account
                       </button>
                     </li>
                   </ul>
@@ -242,9 +293,6 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-
-        {/* Third row: Login/Register buttons (if you want them as separate buttons below nav) */}
-        {/* ...keep or remove as needed... */}
 
         {/* Overlay for mobile menu */}
         {menuOpen && <div className="navbar-overlay" onClick={handleMenuToggle} />}

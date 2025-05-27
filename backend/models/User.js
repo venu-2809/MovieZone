@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  deviceId: { type: String, required: true }, // Bind user to a single device
+  deviceId: { type: String, default: '' }, // Not required, default empty
 });
 
 // Hash password before saving
