@@ -1,0 +1,628 @@
+/* --- Base Styles --- */
+.homepage {
+  padding: 48px 0 0 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #f9f9f9 60%, #ffe5d0 100%);
+  color: #222;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  /* Add smooth fade for background transitions */
+  transition: background 0.4s cubic-bezier(.77,0,.18,1);
+}
+
+/* Decorative background shapes for polish */
+.homepage::before,
+.homepage::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.18;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.homepage::before {
+  width: 340px;
+  height: 340px;
+  left: -120px;
+  top: -80px;
+  background: radial-gradient(circle, #ffb37b 0%, #ffe5d0 100%);
+  animation: floatShape1 8s ease-in-out infinite alternate;
+}
+.homepage::after {
+  width: 260px;
+  height: 260px;
+  right: -90px;
+  bottom: 40px;
+  background: radial-gradient(circle, #ff4500 0%, #ffe5d0 100%);
+  animation: floatShape2 10s ease-in-out infinite alternate;
+}
+
+@keyframes floatShape1 {
+  0% { transform: translateY(0) scale(1);}
+  100% { transform: translateY(30px) scale(1.08);}
+}
+@keyframes floatShape2 {
+  0% { transform: translateY(0) scale(1);}
+  100% { transform: translateY(-24px) scale(1.04);}
+}
+
+.homepage h1 {
+  text-align: center;
+  color: #ff4500;
+  margin-bottom: 36px;
+  font-size: 2.9rem;
+  letter-spacing: 2px;
+  font-weight: 800;
+  text-shadow: 0 2px 12px rgba(255, 69, 0, 0.10);
+  position: relative;
+  z-index: 1;
+  animation: fadeInDown 0.7s cubic-bezier(.77,0,.18,1) both;
+  /* Add subtle gradient text effect */
+  background: linear-gradient(90deg, #ff4500 60%, #ffb37b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.homepage h1::after {
+  content: "";
+  display: block;
+  margin: 18px auto 0 auto;
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ff4500 60%, #ffd6b3 100%);
+  opacity: 0.7;
+  animation: underlineGrow 1s 0.3s cubic-bezier(.77,0,.18,1) both;
+  box-shadow: 0 2px 8px #ffb37b33;
+}
+
+@keyframes underlineGrow {
+  from { width: 0; opacity: 0; }
+  to { width: 80px; opacity: 0.7; }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-32px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* --- Card Containers --- */
+.movie-list,
+.exclusive-content {
+  margin: 36px auto;
+  max-width: 900px;
+  padding: 40px 36px;
+  background: rgba(255,255,255,0.98);
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(255, 69, 0, 0.08), 0 1.5px 8px rgba(0,0,0,0.07);
+  transition: box-shadow 0.2s, transform 0.18s, background 0.3s;
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.7s cubic-bezier(.77,0,.18,1) both;
+  /* Add subtle glassmorphism effect */
+  backdrop-filter: blur(2.5px);
+  border: 1.5px solid #ffe5d0cc;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.movie-list:hover,
+.exclusive-content:hover {
+  box-shadow: 0 14px 48px rgba(255, 69, 0, 0.15), 0 2px 12px rgba(0,0,0,0.10);
+  transform: translateY(-2px) scale(1.012);
+  background: rgba(255,255,255,0.99);
+}
+
+/* --- Section Headings --- */
+.movie-list h2,
+.exclusive-content h2 {
+  color: #ff4500;
+  margin-bottom: 22px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  /* Add subtle left accent bar */
+  padding-left: 18px;
+}
+.movie-list h2::before,
+.exclusive-content h2::before {
+  content: "🎬";
+  font-size: 1.3rem;
+  opacity: 0.88;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.movie-list h2::after,
+.exclusive-content h2::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 38px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ffb37b 60%, #ffd6b3 100%);
+  opacity: 0.5;
+}
+
+/* --- List Styles --- */
+.movie-list ul,
+.exclusive-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* --- List Item Card --- */
+.movie-list li,
+.exclusive-content li {
+  margin-bottom: 20px;
+  padding: 22px 22px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(90deg, #fff 80%, #ffe5d0 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.18s;
+  box-shadow: 0 1px 6px rgba(255, 69, 0, 0.04);
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  /* Add subtle scale on hover for touch devices */
+  will-change: transform;
+}
+
+.movie-list li:last-child,
+.exclusive-content li:last-child {
+  border-bottom: none;
+}
+
+.movie-list li:hover,
+.exclusive-content li:hover,
+.movie-list li:focus-within,
+.exclusive-content li:focus-within {
+  background: linear-gradient(90deg, #fff7f2 80%, #ffd6b3 100%);
+  transform: translateY(-2px) scale(1.018);
+  box-shadow: 0 6px 24px rgba(255, 69, 0, 0.10);
+}
+
+/* Animated left accent bar on hover */
+.movie-list li::before,
+.exclusive-content li::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: linear-gradient(180deg, #ff4500 60%, #ffd6b3 100%);
+  border-radius: 14px 0 0 14px;
+  transition: width 0.22s cubic-bezier(.77,0,.18,1);
+  z-index: 0;
+}
+.movie-list li:hover::before,
+.exclusive-content li:hover::before,
+.movie-list li:focus-within::before,
+.exclusive-content li:focus-within::before {
+  width: 8px;
+}
+
+.movie-list li > *,
+.exclusive-content li > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Add subtle icon/avatar for movie items (optional, for polish) --- */
+.movie-list li .movie-avatar,
+.exclusive-content li .movie-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffe5d0 60%, #ffb37b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px #ffb37b33;
+  flex-shrink: 0;
+  border: 1.5px solid #ffb37b55;
+  transition: box-shadow 0.2s;
+}
+.movie-list li:hover .movie-avatar,
+.exclusive-content li:hover .movie-avatar {
+  box-shadow: 0 4px 16px #ffb37b55;
+}
+
+/* --- Link Styles --- */
+.movie-list a,
+.exclusive-content a {
+  color: #ff4500;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.08rem;
+  transition: color 0.18s, border-bottom 0.18s, background 0.18s;
+  border-bottom: 2px solid transparent;
+  padding: 2px 0;
+  border-radius: 2px;
+  outline: none;
+  /* Add subtle background on hover/focus */
+}
+
+.movie-list a:hover,
+.exclusive-content a:hover,
+.movie-list a:focus,
+.exclusive-content a:focus {
+  color: #d13a00;
+  border-bottom: 2px solid #ff4500;
+  background: #fff3e6;
+}
+
+/* --- Add subtle icon for links --- */
+.movie-list a::after,
+.exclusive-content a::after {
+  content: "↗";
+  font-size: 0.92em;
+  margin-left: 6px;
+  opacity: 0.7;
+  transition: opacity 0.18s;
+}
+.movie-list a:hover::after,
+.exclusive-content a:hover::after {
+  opacity: 1;
+}
+
+/* --- Add subtle fade-in for list items --- */
+.movie-list li,
+.exclusive-content li {
+  opacity: 0;
+  animation: fadeInListItem 0.7s cubic-bezier(.77,0,.18,1) forwards;
+  animation-delay: calc(var(--i, 0) * 0.07s);
+}
+@keyframes fadeInListItem {
+  from { opacity: 0; transform: translateY(18px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* --- Horizontal carousel for exclusive content */
+.exclusive-carousel {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  margin-top: 2rem;
+}
+.exclusive-card {
+  background: rgba(35,41,58,0.97);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  min-width: 290px;
+  max-width: 320px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  transition: transform 0.18s, box-shadow 0.18s;
+  position: relative;
+  animation: fadeInListItem 0.7s cubic-bezier(.77,0,.18,1) forwards;
+  animation-delay: calc(var(--i, 0) * 0.07s);
+}
+.exclusive-card:hover {
+  transform: scale(1.045) translateY(-4px);
+  box-shadow: 0 8px 32px #00b89433;
+  z-index: 2;
+}
+.exclusive-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: 14px 14px 0 0;
+  overflow: hidden;
+  background: #232526;
+}
+.exclusive-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.exclusive-genre {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: #00b894cc;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 3px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px #00b89433;
+}
+.exclusive-card-body {
+  padding: 1.1rem 1.2rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.exclusive-card-body h3 {
+  margin: 0;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+}
+.exclusive-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.05rem;
+  color: #FFD700;
+  font-weight: 600;
+}
+.exclusive-card-body p {
+  color: #b2bec3;
+  font-size: 0.97rem;
+  margin: 0.5rem 0 0.7rem 0;
+  min-height: 48px;
+}
+.exclusive-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+.exclusive-btn {
+  background: #232526;
+  color: #00b894;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 13px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  outline: none;
+}
+.exclusive-btn.play {
+  background: #00b894;
+  color: #fff;
+  font-weight: 600;
+}
+.exclusive-btn:hover, .exclusive-btn:focus {
+  background: #00b894;
+  color: #fff;
+  box-shadow: 0 2px 8px #00b89433;
+}
+.exclusive-btn.play:hover, .exclusive-btn.play:focus {
+  background: #009e7a;
+}
+.exclusive-btn[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #232526;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px #00b89433;
+  opacity: 0.95;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 900px) {
+  .movie-list,
+  .exclusive-content {
+    max-width: 98vw;
+    padding: 22px 8px;
+    margin: 22px 1vw;
+  }
+}
+
+@media (max-width: 700px) {
+  .exclusive-card {
+    min-width: 85vw;
+    max-width: 95vw;
+  }
+  .exclusive-carousel {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .homepage {
+    padding: 18px 0 0 0;
+  }
+  .movie-list,
+  .exclusive-content {
+    padding: 12px 2px;
+    max-width: 99vw;
+    margin: 12px 0.5vw;
+    border-radius: 12px;
+  }
+  .homepage h1 {
+    font-size: 1.45rem;
+    margin-bottom: 18px;
+  }
+  .homepage h1::after {
+    width: 38px;
+    height: 3px;
+  }
+  .movie-list h2,
+  .exclusive-content h2 {
+    font-size: 1.05rem;
+    gap: 5px;
+    padding-left: 12px;
+  }
+  .movie-list h2::after,
+  .exclusive-content h2::after {
+    width: 18px;
+    height: 2px;
+    left: 0;
+    bottom: -4px;
+  }
+  .movie-list li,
+  .exclusive-content li {
+    padding: 10px 3px;
+    font-size: 0.97rem;
+    border-radius: 7px;
+    gap: 8px;
+  }
+  .movie-list li:hover::before,
+  .exclusive-content li:hover::before,
+  .movie-list li:focus-within::before,
+  .exclusive-content li:focus-within::before {
+    width: 3px;
+  }
+  .movie-list li .movie-avatar,
+  .exclusive-content li .movie-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    border-radius: 7px;
+    margin-right: 5px;
+  }
+}
+
+/* --- Scrollbar Styling for polish --- */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #ffe5d0;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffb37b;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff4500;
+}
+
+/* Custom scrollbar for horizontal carousel */
+.exclusive-carousel::-webkit-scrollbar {
+  height: 8px;
+  background: transparent;
+}
+.exclusive-carousel::-webkit-scrollbar-thumb {
+  background: #232526;
+  border-radius: 4px;
+}
+.exclusive-carousel::-webkit-scrollbar-thumb:hover {
+  background: #00b89455;
+}
+
+/* Optional: Subtle vertical scrollbar for the whole page */
+body::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background: #232526;
+  border-radius: 8px;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: #00b89488;
+}
+
+/* --- Focus Styles for Accessibility --- */
+.movie-list a:focus-visible,
+.exclusive-content a:focus-visible {
+  outline: 2px solid #ff4500;
+  outline-offset: 2px;
+  background: #fff3e6;
+}
+
+/* --- Add subtle ripple effect on click for interactive feedback --- */
+.movie-list li:active::after,
+.exclusive-content li:active::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 0; height: 0;
+  background: rgba(255, 179, 123, 0.25);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 0.5s linear;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes ripple {
+  to {
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+  }
+}
+
+/* --- Add tooltip for links (optional, for polish) --- */
+.movie-list a[title]:hover::before,
+.exclusive-content a[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+  top: -32px;
+  background: #ffb37b;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px #ffb37b33;
+  opacity: 0.95;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* --- Add subtle transition for all elements --- */
+* {
+  transition: background 0.2s, color 0.18s, box-shadow 0.18s, border 0.18s;
+}
+
+.movie-card {
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.movie-card:hover {
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 206, 201, 0.15);
+}
+.section,
+.featured-movie-card {
+  animation: fadeInUp 0.7s;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(25px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+.see-all-link:hover {
+  text-decoration: underline;
+}
+.max-w-7xl {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2vw;
+  width: 100%;
+}
